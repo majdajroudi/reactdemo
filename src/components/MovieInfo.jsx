@@ -9,7 +9,7 @@ export default function MovieInfo(props){
   const style = {
     paddingLeft: '15px'
   };
-
+    console.log(props.movie)
     return(
       <div style={style}>
         <Row>

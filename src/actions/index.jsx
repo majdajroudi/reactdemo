@@ -18,6 +18,9 @@ export const FETCH_CASTS_FAILURE = 'FETCH_CASTS_FAILURE';
 export const FETCH_TRAILERS = 'FETCH_TRAILERS';
 export const FETCH_TRAILERS_SUCCESS = 'FETCH_TRAILERS_SUCCESS';
 export const FETCH_TRAILERS_FAILURE = 'FETCH_TRAILERS_FAILURE';
+export const FETCH_SIMILAR_MOVIES = 'FETCH_SIMILAR_MOVIES'
+export const FETCH_SIMILAR_MOVIES_SUCCESS = 'FETCH_SIMILAR_MOVIES_SUCCESS'
+export const FETCH_SIMILAR_MOVIES_FAILURE = 'FETCH_SIMILAR_MOVIES_FAILURE'
 
 function searchMovie(searchText) {
   return {
@@ -72,6 +75,26 @@ function fetchMovieSuccess(data) {
     type: FETCH_MOVIE_SUCCESS,
     data
   };
+}
+
+function fetchSimilarMovies() {
+  return {
+    type: FETCH_SIMILAR_MOVIES
+  }
+}
+
+function fetchSimilarMoviesSuccess(data) {
+  return {
+    type: FETCH_SIMILAR_MOVIES_SUCCESS,
+    data
+  }
+}
+
+function fetchSimilarMoviesFail(error) {
+  return {
+    type: FETCH_SIMILAR_MOVIES_FAILURE,
+    error
+  }
 }
 
 function fetchMovieFail(error) {
@@ -134,6 +157,8 @@ function fetchTrailersFail(error) {
     error
   };
 }
+
+
 
 export function searchMovieList(keyword){
   let url = URL_SEARCH + keyword + API_KEY_ALT;
@@ -208,5 +233,17 @@ export function fetchTrailerList(id){
         });
         dispatch(fetchTrailersSuccess(youtubeTrailers));
       }).catch(error => dispatch(fetchTrailersFail(error)))
+  }
+}
+
+export function fetchSimilarMoviesList(id){
+  const url_similar = URL_DETAIL+id+"/similar"+API_KEY;
+  return function(dispatch){
+    dispatch(fetchSimilarMovies())
+    return fetch(url_similar)
+    .then(response => response.json())
+    .then(json => json.results)
+    .then (data => dispatch(fetchSimilarMoviesSuccess(data.slice(0,5))))
+    .catch(error => dispatch(fetchSimilarMoviesFail(error)))
   }
 }

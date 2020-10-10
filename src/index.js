@@ -17,6 +17,8 @@ import { DisplayMsg } from './components';
 const routeMiddleware = routerMiddleware(hashHistory);
 let store = createStore(movieApp, composeWithDevTools(
   applyMiddleware(thunkMiddleware, routeMiddleware)));
+
+store.subscribe(() => {console.log("state",store.getState())})
 const history = syncHistoryWithStore(hashHistory,store);
 
 ReactDOM.render(
